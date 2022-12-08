@@ -1,5 +1,5 @@
 ---
-title: "UAS Database kelompok B"
+title: "UAS Database kelompok B FLex "
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
