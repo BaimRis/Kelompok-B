@@ -1,13 +1,43 @@
 ---
-title: "UAS Database kelompok B"
+title: "Flex Dashboards"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
-    vertical_layout: fill
+    vertical_layout: scroll
+    theme: united
+    source_code: embed
 ---
 
 ```{r setup, include=FALSE}
+# Importing libraries
 library(flexdashboard)
+library(tidyverse)
+library(highcharter)
+library(gt)
+library(htmltools)
+library(viridis)
+library(DT)
+```
+
+
+```{r, include = FALSE}
+# Importing data
+orders<- read.csv('Orders.csv')
+product = read.csv('Products.csv')
+employee = read.csv('Employees.csv')
+Cust = read.csv('Customers.csv')
+ship = read.csv('Shippers.csv')
+orderdets = read.csv('OrderDetails.csv')
+supp = read.csv('Suppliers.csv')
+cat = read.csv('Categories.csv')
+
+df2 <- merge(x=orders,y=orderdets, 
+             by="OrderID")
+df2a = merge(df2, employee, by='EmployeeID')
+
+
+
+```
+
 ```
 
 Column {data-width=650}
