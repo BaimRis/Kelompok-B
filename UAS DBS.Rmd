@@ -21,19 +21,6 @@ library(DT)
 
 ```{r, include = FALSE}
 # Importing data
-orders<- read.csv('Orders.csv')
-product = read.csv('Products.csv')
-employee = read.csv('Employees.csv')
-Cust = read.csv('Customers.csv')
-ship = read.csv('Shippers.csv')
-orderdets = read.csv('OrderDetails.csv')
-supp = read.csv('Suppliers.csv')
-cat = read.csv('Categories.csv')
-
-df2 <- merge(x=orders,y=orderdets, 
-             by="OrderID")
-df2a = merge(df2, employee, by='EmployeeID')
-
 
 
 ```
