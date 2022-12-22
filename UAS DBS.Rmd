@@ -179,9 +179,12 @@ Human Resource Dashboard {data-orientation=columns}
 ## Row
 -----------------------------------------------------------------------
 
-### Employees Work rate {data-width=800}
+### Employees Work rate {data-width=1500}
 
 ```{r}
+
+# Colors
+custom <- rainbow(n = 9)
 df2d = merge(df2b, employee, 'EmployeeID')
 
 df2d%>% 
@@ -189,7 +192,7 @@ df2d%>%
   summarise(TotalOrder= sum(TotalOrder)) %>% 
   arrange(FirstName) %>%
 
-hchart('line', hcaes(x = quarter, y =TotalOrder , group = FirstName)) %>%   hc_add_theme(hc_theme_google()) %>% 
+hchart('line', hcaes(x = quarter, y =TotalOrder , group = FirstName)) %>%    hc_colors(custom) %>% hc_add_theme(hc_theme_google()) %>% 
   hc_tooltip(pointFormat = '<b>Number of Sales: </b> {point.y} <br>') %>% 
   hc_title(text = 'Total Sales by Month Per Employyee',
            style = list(fontSize = '25px', fontWeight = 'bold')) %>% 
@@ -198,11 +201,10 @@ hchart('line', hcaes(x = quarter, y =TotalOrder , group = FirstName)) %>%   hc_a
   hc_credits(enabled = TRUE, text = '@stroberi')
 ```
 
-### Average Order Total of Each Employees
+### Average Order Total of Each Employees 
 
 ```{r}
-# Colors
-custom <- viridis::cividis(n = 9)
+
 
 # Most popular authors by reviews
 df2d %>% 
@@ -218,4 +220,26 @@ df2d %>%
               style = list(fontSize = '16px')) %>% 
   hc_credits(enabled = TRUE, text = '@stroberi')
 ```
+
+### 
+
+```{r}
+
+df2e = merge(df2d, cat, 'CategoryID')
+color2 <- viridis::turbo(n = 8)
+df2e %>% 
+  group_by(FirstName, CategoryName) %>% 
+  summarise(TotalOrder= sum(TotalOrder) )%>% 
+  arrange(desc(TotalOrder)) %>% 
+   
+  hchart('column', hcaes(x = FirstName, y =TotalOrder ,group = CategoryName), stacking='normal') %>% hc_colors(color2) %>%  hc_add_theme(hc_theme_google()) %>% 
+  hc_tooltip(pointFormat = '<b> Revenue from This Category : </b> {point.y} <br>') %>% 
+  hc_title(text = 'Employees Revenue ',
+           style = list(fontSize = '25px', fontWeight = 'bold')) %>% 
+  hc_subtitle(text = 'Classified per Categories',
+              style = list(fontSize = '16px')) %>% 
+  hc_credits(enabled = TRUE, text = '@stroberi')
+```
+
+
 
