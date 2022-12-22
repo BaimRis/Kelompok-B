@@ -146,8 +146,6 @@ df2b %>%
 ### Category
 
 ```{r}
-# Colors
-custom_colors <- viridis::plasma(n = 8)
 # Load required R packages
 library(tidyverse)
 library(highcharter) 
@@ -196,6 +194,27 @@ hchart('line', hcaes(x = quarter, y =TotalOrder , group = FirstName)) %>%   hc_a
   hc_title(text = 'Total Sales by Month Per Employyee',
            style = list(fontSize = '25px', fontWeight = 'bold')) %>% 
   hc_subtitle(text = 'Visualized in A Line',
+              style = list(fontSize = '16px')) %>% 
+  hc_credits(enabled = TRUE, text = '@stroberi')
+```
+
+### Average Order Total of Each Employees
+
+```{r}
+# Colors
+custom <- viridis::cividis(n = 9)
+
+# Most popular authors by reviews
+df2d %>% 
+  group_by(FirstName) %>% 
+  summarise(TotalOrder= mean(TotalOrder)) %>% 
+  arrange(desc(TotalOrder)) %>% 
+   
+  hchart('lollipop', hcaes(x = FirstName, y =TotalOrder ,color = custom)) %>%   hc_add_theme(hc_theme_google()) %>% 
+  hc_tooltip(pointFormat = '<b> Average Order Amount: </b> {point.y} <br>') %>% 
+  hc_title(text = 'Average Orders Per Employees ',
+           style = list(fontSize = '25px', fontWeight = 'bold')) %>% 
+  hc_subtitle(text = 'Sort from the highest average',
               style = list(fontSize = '16px')) %>% 
   hc_credits(enabled = TRUE, text = '@stroberi')
 ```
