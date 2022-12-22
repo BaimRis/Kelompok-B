@@ -33,7 +33,7 @@ cat = read.csv('Categories.csv')
 ```
  
 
-Bar-chart {data-orientation=columns}
+Revenue Dashboard {data-orientation=columns}
 =======================================================================
 
 
@@ -75,10 +75,8 @@ df2b %>%
 
 ```{r}
 df2b$OrderDate = as.Date(df2b$OrderDate)
-
-library(tidyverse)
 colors <- viridis::magma(n = 8)
-
+library(tidyverse)
 #group data by month and sum sales
 df2b %>% 
     group_by(month = lubridate::floor_date(OrderDate, 'month')) %>%
@@ -94,3 +92,111 @@ df2b %>%
   hc_credits(enabled = TRUE, text = '@stroberi')
 
 ```
+
+
+Products Dashboard {data-orientation=columns}
+=======================================================================
+
+
+## Row
+-----------------------------------------------------------------------
+
+### Top 10 Product made the most Revenue {data-width=800}
+
+```{r}
+
+color1 <- viridis::inferno(n = 10)
+
+df2b %>% 
+  group_by(ProductName) %>% 
+  summarise(TotalOrder= sum(TotalOrder)) %>% 
+  arrange(desc(TotalOrder)) %>% 
+  head(10) %>% 
+  hchart('column', hcaes(x = ProductName, y =TotalOrder ,color = color1)) %>%   hc_add_theme(hc_theme_google()) %>% 
+  hc_tooltip(pointFormat = '<b>Number of Sales: </b> {point.y} <br>') %>% 
+  hc_title(text = 'Total Sales of Product',
+           style = list(fontSize = '25px', fontWeight = 'bold')) %>% 
+  hc_subtitle(text = 'Top 10 By revenue',
+              style = list(fontSize = '16px')) %>% 
+  hc_credits(enabled = TRUE, text = '@stroberi')
+```
+
+### Top 10 Product Sold By Quantity
+
+```{r}
+# Colors
+custom_colors <- viridis::plasma(n = 10)
+
+# Most popular authors by reviews
+df2b %>% 
+  group_by(ProductName) %>% 
+  summarise(ProductQuantity= sum(Quantity)) %>% 
+  arrange(desc(ProductQuantity)) %>% 
+  head(10) %>% 
+  hchart('lollipop', hcaes(x = ProductName, y =ProductQuantity ,color = custom_colors)) %>%   hc_add_theme(hc_theme_google()) %>% 
+  hc_tooltip(pointFormat = '<b>Number of Quantity: </b> {point.y} <br>') %>% 
+  hc_title(text = 'Total Sales by Product',
+           style = list(fontSize = '25px', fontWeight = 'bold')) %>% 
+  hc_subtitle(text = '10 Most Sold Product By Quantity',
+              style = list(fontSize = '16px')) %>% 
+  hc_credits(enabled = TRUE, text = '@stroberi')
+
+```
+
+### Category
+
+```{r}
+# Colors
+custom_colors <- viridis::plasma(n = 8)
+# Load required R packages
+library(tidyverse)
+library(highcharter) 
+
+df2c = merge(df2b, cat, 'CategoryID')
+
+df2c%>% 
+  group_by(CategoryName) %>% 
+  summarise(TotalOrder= sum(TotalOrder)) %>% 
+  arrange(desc(TotalOrder)) %>% 
+  head(8) %>% 
+  
+  hchart(
+    "treemap", 
+    hcaes(x = CategoryName, value = TotalOrder, color = TotalOrder)
+    ) %>%  hc_add_theme(hc_theme_google()) %>% 
+   hc_colorAxis(stops = color_stops(colors = viridis::inferno(10))) %>%
+  hc_tooltip(pointFormat = '<b>Number of Sales: </b> {point.value} <br>') %>% 
+  hc_title(text = 'Total Sales by Categories',
+           style = list(fontSize = '25px', fontWeight = 'bold')) %>% 
+  hc_subtitle(text = 'By Treemap Proportions',
+              style = list(fontSize = '16px')) %>% 
+  hc_credits(enabled = TRUE, text = '@stroberi')
+
+```
+
+Human Resource Dashboard {data-orientation=columns}
+=======================================================================
+
+
+## Row
+-----------------------------------------------------------------------
+
+### Employees Work rate {data-width=800}
+
+```{r}
+df2d = merge(df2b, employee, 'EmployeeID')
+
+df2d%>% 
+  group_by(FirstName, quarter = lubridate::floor_date(OrderDate, 'quarter')) %>% 
+  summarise(TotalOrder= sum(TotalOrder)) %>% 
+  arrange(FirstName) %>%
+
+hchart('line', hcaes(x = quarter, y =TotalOrder , group = FirstName)) %>%   hc_add_theme(hc_theme_google()) %>% 
+  hc_tooltip(pointFormat = '<b>Number of Sales: </b> {point.y} <br>') %>% 
+  hc_title(text = 'Total Sales by Month Per Employyee',
+           style = list(fontSize = '25px', fontWeight = 'bold')) %>% 
+  hc_subtitle(text = 'Visualized in A Line',
+              style = list(fontSize = '16px')) %>% 
+  hc_credits(enabled = TRUE, text = '@stroberi')
+```
+
