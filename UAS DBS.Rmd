@@ -21,19 +21,50 @@ library(DT)
 
 ```{r, include = FALSE}
 # Importing data
-
+orders<- read.csv('Orders.csv')
+product = read.csv('Products.csv')
+employee = read.csv('Employees.csv')
+Cust = read.csv('Customers.csv')
+ship = read.csv('Shippers.csv')
+orderdets = read.csv('OrderDetails.csv')
+supp = read.csv('Suppliers.csv')
+cat = read.csv('Categories.csv')
 
 ```
-
-```
+ 
 
 Column {data-width=650}
 -----------------------------------------------------------------------
 
 ### Chart A
 
-```{r}
+```{r, include = FALSE}
 
+df2 <- merge(x=orders,y=orderdets, 
+             by="OrderID")
+df2a = merge(df2, Cust, by='CustomerID')
+df2b = merge(df2a, product, by='ProductID')
+df2b$TotalOrder = df2b$Quantity*df2b$Price
+
+```
+
+```{r}
+# Colors
+custom_colors <- viridis::plasma(n = 9)
+
+# Most popular authors by reviews
+df2b %>% 
+  group_by(Country) %>% 
+  summarise(TotalOrder= sum(TotalOrder)) %>% 
+  arrange(desc(TotalOrder)) %>% 
+  head(9) %>% 
+  hchart('column', hcaes(x = Country, y =TotalOrder ,color = custom_colors)) %>%   hc_add_theme(hc_theme_google()) %>% 
+  hc_tooltip(pointFormat = '<b>Number of Sales: </b> {point.y} <br>') %>% 
+  hc_title(text = 'Total Items Sold per Employee',
+           style = list(fontSize = '25px', fontWeight = 'bold')) %>% 
+  hc_subtitle(text = 'By Items Sold',
+              style = list(fontSize = '16px')) %>% 
+  hc_credits(enabled = TRUE, text = '@stroberi')
 ```
 
 Column {data-width=350}
