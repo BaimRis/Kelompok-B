@@ -1,5 +1,5 @@
 ---
-title: "Flex Dashboards"
+title: "Factory_DB Dashboard"
 output: 
   flexdashboard::flex_dashboard:
     vertical_layout: scroll
@@ -56,7 +56,7 @@ df2b$TotalOrder = df2b$Quantity*df2b$Price
 # Colors
 custom_colors <- viridis::plasma(n = 21)
 
-# Most popular authors by reviews
+
 df2b %>% 
   group_by(Country) %>% 
   summarise(TotalOrder= sum(TotalOrder)) %>% 
@@ -106,7 +106,7 @@ Products Dashboard {data-orientation=columns}
 # Colors
 custom_colors <- viridis::plasma(n = 10)
 
-# Most popular authors by reviews
+
 df2b %>% 
   group_by(ProductName) %>% 
   summarise(ProductQuantity= sum(Quantity)) %>% 
@@ -204,8 +204,6 @@ hchart('line', hcaes(x = quarter, y =TotalOrder , group = FirstName)) %>%    hc_
 
 ```{r}
 
-
-# Most popular authors by reviews
 df2d %>% 
   group_by(FirstName) %>% 
   summarise(TotalOrder= mean(TotalOrder)) %>% 
@@ -241,4 +239,32 @@ df2e %>%
 ```
 
 
+Human Resource Dashboard {data-orientation=columns}
+=======================================================================
+
+
+
+Column {data-width=750}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+
+```
+
+### Chart C
+
+```{r}
+
+```
 
