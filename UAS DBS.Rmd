@@ -184,7 +184,7 @@ Human Resource Dashboard {data-orientation=columns}
 ```{r}
 
 # Colors
-custom <- rainbow(n = 9)
+custom <- rainbow(n = 9) 
 df2d = merge(df2b, employee, 'EmployeeID')
 
 df2d%>% 
