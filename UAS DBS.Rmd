@@ -100,27 +100,6 @@ Products Dashboard {data-orientation=columns}
 
 ## Row
 -----------------------------------------------------------------------
-
-### Top 10 Product made the most Revenue {data-width=800}
-
-```{r}
-
-color1 <- viridis::inferno(n = 10)
-
-df2b %>% 
-  group_by(ProductName) %>% 
-  summarise(TotalOrder= sum(TotalOrder)) %>% 
-  arrange(desc(TotalOrder)) %>% 
-  head(10) %>% 
-  hchart('column', hcaes(x = ProductName, y =TotalOrder ,color = color1)) %>%   hc_add_theme(hc_theme_google()) %>% 
-  hc_tooltip(pointFormat = '<b>Number of Sales: </b> {point.y} <br>') %>% 
-  hc_title(text = 'Total Sales of Product',
-           style = list(fontSize = '25px', fontWeight = 'bold')) %>% 
-  hc_subtitle(text = 'Top 10 By revenue',
-              style = list(fontSize = '16px')) %>% 
-  hc_credits(enabled = TRUE, text = '@stroberi')
-```
-
 ### Top 10 Product Sold By Quantity
 
 ```{r}
@@ -141,6 +120,26 @@ df2b %>%
               style = list(fontSize = '16px')) %>% 
   hc_credits(enabled = TRUE, text = '@stroberi')
 
+```
+
+### Top 10 Product made the most Revenue {data-width=800}
+
+```{r}
+
+color1 <- viridis::inferno(n = 10)
+
+df2b %>% 
+  group_by(ProductName) %>% 
+  summarise(TotalOrder= sum(TotalOrder)) %>% 
+  arrange(desc(TotalOrder)) %>% 
+  head(10) %>% 
+  hchart('column', hcaes(x = ProductName, y =TotalOrder ,color = color1)) %>%   hc_add_theme(hc_theme_google()) %>% 
+  hc_tooltip(pointFormat = '<b>Number of Sales: </b> {point.y} <br>') %>% 
+  hc_title(text = 'Total Sales of Product',
+           style = list(fontSize = '25px', fontWeight = 'bold')) %>% 
+  hc_subtitle(text = 'Top 10 By revenue',
+              style = list(fontSize = '16px')) %>% 
+  hc_credits(enabled = TRUE, text = '@stroberi')
 ```
 
 ### Category
