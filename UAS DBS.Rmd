@@ -171,6 +171,36 @@ df2c%>%
 
 ```
 
+### Products Price Scatter plot
+
+```{r, include=FALSE}
+dfx = df2c%>% 
+  group_by(ProductName) %>% 
+  summarise(price= (Price), TotalOrder=sum(TotalOrder), TotalQ = sum(Quantity), category =(CategoryName)) %>% 
+  arrange(desc(price)) 
+
+dfxx = dfx %>%
+
+   distinct(ProductName, .keep_all = TRUE)
+
+```
+
+```{r}
+custom = viridis::viridis(n=77)
+dfxx %>% 
+  hchart('scatter', hcaes(x = TotalOrder, y =TotalQ , size = price, group = ProductName)) %>%    hc_colors(custom) %>% hc_add_theme(hc_theme_google()) %>% 
+  hc_tooltip(pointFormat = '<b>Price Each: </b> {point.price} <br> <b>Total Sales : </b> <br> {point.x} <br> <b>Quantity Sold : </b>  <br> {point.y}') %>% 
+  hc_title(text = 'Total Sales by Quantity and Price Each',
+           style = list(fontSize = '25px', fontWeight = 'bold')) %>% 
+  hc_subtitle(text = 'Visualized in Scatter',
+              style = list(fontSize = '16px')) %>% 
+  hc_legend(enabled=F) %>%
+  hc_credits(enabled = TRUE, text = '@stroberi')
+```
+
+
+
+
 Human Resource Dashboard {data-orientation=columns}
 =======================================================================
 
@@ -193,7 +223,7 @@ df2d%>%
 
 hchart('line', hcaes(x = quarter, y =TotalOrder , group = FirstName)) %>%    hc_colors(custom) %>% hc_add_theme(hc_theme_google()) %>% 
   hc_tooltip(pointFormat = '<b>Number of Sales: </b> {point.y} <br>') %>% 
-  hc_title(text = 'Total Sales by Month Per Employyee',
+  hc_title(text = 'Total Sales by Quarter Per Employyee',
            style = list(fontSize = '25px', fontWeight = 'bold')) %>% 
   hc_subtitle(text = 'Visualized in A Line',
               style = list(fontSize = '16px')) %>% 
@@ -238,4 +268,52 @@ df2e %>%
   hc_credits(enabled = TRUE, text = '@stroberi')
 ```
 
+
+
+Supplier Dashboard {data-orientation=columns}
+=======================================================================
+
+
+## Row
+-----------------------------------------------------------------------
+
+### Suppliers and Number of Product which they were supplying {data-width=1500}
+
+```{r}
+colors <- viridis::plasma(n=29)
+
+df2f = merge(df2e, supp, 'SupplierID')
+
+
+df2f %>% 
+  group_by(SupplierName) %>% 
+  summarise(Products= n_distinct(ProductName)) %>% 
+  arrange(desc(Products)) %>% 
+
+  hchart('column', hcaes(x = SupplierName, y =Products ,color = colors)) %>%   hc_add_theme(hc_theme_google()) %>% 
+  hc_tooltip(pointFormat = '<b>Number of Products Supplied: </b> {point.y} <br>') %>% 
+  hc_title(text = 'Total products Supplied',
+           style = list(fontSize = '25px', fontWeight = 'bold')) %>% 
+  hc_subtitle(text = 'From Each Supplier',
+              style = list(fontSize = '16px')) %>% 
+  hc_credits(enabled = TRUE, text = '@stroberi')
+```
+
+### Which Suupliers gave us the highest revenue ??
+
+```{r}
+colors <- viridis::viridis(n = 29)
+df2f %>% 
+  group_by(SupplierName) %>% 
+  summarise(Revenue = sum(TotalOrder)) %>% 
+  arrange(desc(Revenue)) %>% 
+
+  hchart('bar', hcaes(x = SupplierName, y = Revenue,color = colors)) %>%   hc_add_theme(hc_theme_google()) %>% 
+  hc_tooltip(pointFormat = '<b>Revenue From This Supplier: </b> {point.y} <br>') %>% 
+  hc_title(text = 'Total Revenue Gained',
+           style = list(fontSize = '25px', fontWeight = 'bold')) %>% 
+  hc_subtitle(text = 'From Each Supplier',
+              style = list(fontSize = '16px')) %>% 
+  hc_credits(enabled = TRUE, text = '@stroberi')
+```
 
